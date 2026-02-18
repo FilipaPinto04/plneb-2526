@@ -1,0 +1,30 @@
+# TPC1 - Processamento de Linguagem Natural 
+
+## Exercícios 
+
+1. **Inverter uma string:** 
+Retorna a string lida a partir do fim até o ínicio.
+
+2. **Contar "a" e "A":** 
+Retorna o número de vezes que os caracteres "a" (minúsculo) e "A" (maiúsculo) aparecem na string através da função count.
+
+3. **Contar vogais:** 
+Calcula o número total de vogais presentes na string através da soma das ocorrências de vogais na string.
+
+4. **Converter para minúsculas:** 
+Transforma a string toda em letras minúsculas.
+
+5. **Converter para maiúsculas:** 
+Transforma a string toda em letras maiúsculas.
+
+6. **Verificar Capicua (Palíndromo):** 
+Valida se a string se lê da mesma forma da esquerda para a direita e vice-versa.
+
+7. **Strings Balanceadas:** 
+Verifica se todos os caracteres presentes numa primeira string também existem numa segunda string, se não retorna 'False'.
+
+8. **Contar Ocorrências:** 
+Calcula quantas vezes uma string `s1` aparece dentro de uma string `s2`, através da função count.
+
+9. **Verificar Anagramas:** 
+Valida se duas strings são anagramas, isto é, se uma stringcontêm exatamente as mesmas letras de outra string, mas numa ordem diferente. Para tal, primeiro retirou-se das strings possíveis espaços e aplicou-se a função lower. Por fim, aplicou-se a função sorted às duas "novas" strings para verificar se ordenadas são iguais.
