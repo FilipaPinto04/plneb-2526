@@ -1,0 +1,37 @@
+# TPC2 - Processamento de Linguagem Natural 
+
+## Exercícios 
+
+* **Exercício 1:** 
+  * `re.match()` procura padrões estritamente no início da string.
+  * `re.search()` pesquisa a primeira ocorrência do padrão em qualquer posição.
+  * `re.findall()` extrai todas as ocorrências para uma lista (a flag `re.IGNORECASE` é para ignorar maiúsculas/minúsculas).
+  * `re.sub()` substitui o texto esperado `hello`, por um texto dado como variável.
+  * `re.split()` divide uma string utilizando o padrão definido como delimitador.
+
+* **Exercício 2:** 
+Aplica `re.findall(r"por favor[.?!]$", frase)` para verificar se a string termina estritamente com a expressão "por favor" seguida de pontuação válida. O `$` assegura que a verificação ocorre no fim da frase. O exercíxio retorna um valor booleano (`True` ou `False`).
+
+* **Exercício 3:** 
+Utiliza `re.findall(r'eu', linha, flags=re.IGNORECASE)` para extrair todas as instâncias do pronome "eu". Itera sobre a lista resultante com um ciclo `for` para contabilizar as ocorrências e retorna a contagem total.
+
+* **Exercício 4:** 
+Usa-se `re.sub(r"LEI", novo_curso, linha)` para encontrar o padrão exato "LEI" e substitui-lo pela string fornecida no argumento `novo_curso`. Retorna a string modificada.
+
+* **Exercício 5:** 
+Extrai todos os números numa string através do padrão `re.findall(r'-?\d+', linha)`, onde `-?` capta um sinal negativo opcional e `\d+` capta um ou mais dígitos. Converte cada match extraído para inteiro (`int`) num ciclo `for`, calcula a soma e retorna o valor final.
+
+* **Exercício 6:** 
+Recorre ao operador `|` no padrão `re.findall(r'eu|tu|ele|ela|nós|vós|eles|elas', frase, flags=re.IGNORECASE)` para identificar simultaneamente múltiplos pronomes pessoais. Retorna a lista das correspondências encontradas.
+
+* **Exercício 7:** 
+Valida regras de sintaxe através da instrução `re.search(r'^[A-Za-z]\w*$', frase)`. O`^` exige que a string inicie com uma letra `[A-Za-z]`, enquanto `\w*$` garante que o restante da string até ao final contenha apenas caracteres alfanuméricos ou *underscores*. Retorna um booleano.
+
+* **Exercício 8:** 
+Retorna todos os números inteiros, positivos ou negativos, contidos numa string através de `re.findall('-?\d+', linha)`.
+
+* **Exercício 9:** 
+Substitui a os espaços num texto aplicando `re.sub(r' +', '_', linha)`. O `+` identifica a presença de um ou mais espaços consecutivos, substituindo-os por um único *underscore*. Retorna a string normalizada.
+
+* **Exercício 10:** 
+Aplica `re.split(r'-', cod)` para separar os blocos numéricos de cada código postal. Converte a lista gerada pela divisão num tuplo usando `tuple()` e retorna uma lista contendo esses pares finais.
