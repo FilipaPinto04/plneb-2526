@@ -1,0 +1,39 @@
+# TPC3 - Processamento de Linguagem Natural
+
+Este trabalho consiste num script de processamento de texto desenvolvido para converter um dicionário médico não estruturado em formatos digitais.
+
+O script lê o ficheiro de texto completo, limpa inconsistências e gera uma estrutura de dados organizada. 
+A principal diferença em relação ao que foi desenvolvido em aula reside na limpeza dos dados e na capacidade de capturar termos que antes eram ignorados.
+
+
+# Tratamento de `\f`
+O ficheiro original continha caracteres de controlo `\f`, usados para saltos de página em PDFs. Estes caracteres impediam a deteção correta de 
+sequências de parágrafos (`\n\n`), fazendo com que o conceito seguinte fosse ignorado ou "colado" à descrição anterior.
+- Solução: Adicionou-se `text = re.sub(r'\f', '\n', text)` para normalizar o ficheiro, permitindo que o marcador de conceito atue em todas as páginas.
+
+# Normalização para casos `FF`
+Alguns conceitos médicos são siglas curtas (ex: FF, AA, ãa). 
+- Melhoria: Ao ajustar a lógica de substituição e marcação, garante-se que o marcador (`@`) é colocado sempre que existe um espaço em branco 
+considerável (`\n\n`), independentemente de o termo ter apenas 2 letras ou ser uma palavra completa.
+
+# Regex de Limpeza e "Colagem" de Texto
+Para evitar que uma descrição fosse partida ao meio por erro, utilizou-se uma expressão regular que deteta se o marcador `@` aparece entre duas 
+letras minúsculas: `re.sub(r'([a-zà-ú])\s*\n\n@\n\s*([a-zà-ú])', r'\1 \2', text)`
+Esta regra identifica que se trata da continuação de uma frase e "cola" o texto, removendo a marcação de novo conceito acidental.
+
+# Parsing Estruturado com `maxsplit`
+A lógica de separação foi refinada para evitar perda de informação:
+1. Divide o texto pelo marcador `@`.
+2. Em cada bloco, utiliza-se `split('\n', 1)` (ou `maxsplit=1`) para separar o Conceito (obrigatoriamente a primeira linha) 
+da Descrição (todo o resto do texto, preservando múltiplas linhas de definição).
+
+
+## Fluxo de tratamento do documento
+
+O script processa o ficheiro `dicionario_medico.txt` seguindo estas etapas:
+
+1. Leitura e Limpeza: O ficheiro é carregado com `utf8` e limpo de caracteres especiais (`\f`).
+2. Marcação de Conceitos: Identificam-se as entradas através de quebras de linha múltiplas, inserindo o marcador `@`.
+3. Refinação: Aplicação de Regex para garantir que siglas e quebras de página não corrompam os dados.
+4. Parsing e Estruturação: O texto é partido em blocos. Cada bloco é dividido entre termo (chave) e definição (valor) num dicionário Python.
+5. Geração de HTML: Cria uma página web organizada para consulta fácil do dicionário médico.
