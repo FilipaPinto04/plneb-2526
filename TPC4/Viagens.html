@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Files</title>
+    
+    <link rel="icon" type="image/svg+xml" 
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FFFFFF'><path d='M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z'/></svg>">
+    
+    <style>
+        /*GERAL*/
+        body { 
+            margin: 0; 
+            padding-top: 60px; 
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f4f1ea;
+            scroll-behavior: smooth;
+        }
+
+
+        /*BARRA*/
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 80px;
+            background-color: #5d4037;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            padding: 0 60px;
+            box-sizing: border-box;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.3);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .nav-side { flex: 1; display: flex; }
+        .nav-left { justify-content: flex-start; }
+        .nav-right { justify-content: flex-end; }
+
+        .navbar a {
+            color: #fdfaf6;
+            text-decoration: none;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 2px;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 10px 0;
+        }
+
+        .nav-side a::after {
+            content: '';
+            position: absolute;
+            width: 0; height: 2px; bottom: 0; left: 0;
+            background-color: #d2b48c;
+            transition: width 0.3s ease;
+        }
+
+        .nav-side a:hover::after { width: 100%; }
+        .nav-side a:hover { color: #d2b48c; }
+
+        .nav-center {
+            font-family: 'Digital', serif;
+            font-size: 2.2rem !important;
+            font-style: italic;
+            color: #d2b48c !important;
+            text-transform: capitalize !important;
+            padding: 0 20px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-center:hover {
+            color: #fdfaf6 !important;
+            transform: scale(1.1);
+            text-shadow: 0 0 10px rgba(210, 180, 140, 0.5);
+        }
+
+
+        /*HEADER E MAPA*/
+        .header-mapa {
+            height: 300px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background-color: #d2b48c;
+        }
+
+        .background-mapa {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: url('Imagens/mapa.jpg'); 
+            background-size: cover;
+            background-position: center;
+            filter: blur(4px) brightness(0.9); 
+            z-index: 1;
+            transform: scale(1.1);
+        }
+
+        .titulo-travel {
+            position: relative;
+            z-index: 2;
+            color: #5d4037; 
+            font-family: 'Digital', serif;
+            font-size: 7.5rem;
+            font-weight: 700;
+            font-style: italic;
+            text-align: center;
+            letter-spacing: -2px;
+            margin: 0;
+            text-shadow: 2px 2px 20px rgba(255,255,255,0.4);
+        }
+
+        /* SECÇÃO - BOARDING PASS*/
+        .boarding-card-v2 {
+            background: #c3a18a; 
+            color: #4a342a;  
+            display: flex;
+            margin: 70px auto;
+            width: 100%;
+            max-width: 950px;
+            min-height: 220px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+            font-family: 'Lato', sans-serif;
+            position: relative;
+        }
+
+        .boarding-body {
+            flex: 3;
+            padding: 25px 35px;
+            border-right: 2px dashed rgba(74, 52, 42, 0.8); 
+            position: relative;
+        }
+
+        .boarding-body::before, .boarding-body::after {
+            content: '';
+            position: absolute;
+            right: -11px;
+            width: 20px;
+            height: 20px;
+            background: #f4f1ea;
+            border-radius: 50%;
+            z-index: 2;
+        }
+        .boarding-body::before { top: -11px; }
+        .boarding-body::after { bottom: -11px; }
+
+        .boarding-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(74, 52, 42, 0.8);
+        }
+
+        .airline-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #4a342a; 
+            font-size: 0.9rem;
+        }
+
+        .boarding-middle {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .passenger-details {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            flex: 1;
+        }
+
+        .flight-path-v2 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            justify-content: flex-start;
+        }
+
+        .airport h3 { font-size: 1.6rem; font-weight: 900; line-height: 1; }
+        .airport p { font-size: 0.7rem; color: #4a342a; margin: 0; }
+
+        .path-line { height: 1px; background: rgba(74, 52, 42, 0.8); width: 40px; }
+
+        .flight-specifics {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px 30px;
+            border-top: none;
+            border-left: 1px solid rgba(74, 52, 42, 0.8);
+            padding: 0 0 0 30px;
+            margin-top: 0;
+        }
+
+        .data-block label {
+            font-size: 0.6rem;
+            color: #4a342a;
+            margin-bottom: 2px;
+        }
+
+        .data-block h3 {
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        .boarding-stub-v2 {
+            flex: 0.8;
+            background: rgba(0,0,0,0.05); 
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .large-counter h3 {
+            font-size: 2rem;
+            color: #4a342a; 
+            margin: 5px 0;
+        }
+
+        .stub-icon { margin-top: 15px; opacity: 0.99; }
+
+
+        /* SECÇÃO - MY TRAVELS*/
+        .seccao-arquivo {
+            width: 100%;          
+            margin: 0;              
+            padding-top: 60px;       
+            padding-bottom: 60px;    
+        }
+
+        .seccao-arquivo h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: #5d4037;
+            text-align: center;
+            margin: 0 auto 50px auto; 
+            max-width: 1250px;
+            font-weight: 700;
+            position: relative; 
+            padding-bottom: 15px;
+        }
+
+        .seccao-arquivo h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;        
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: #d2b48c;
+        }
+
+        .viagem-container {
+            display: flex;
+            background-color: #fff;
+            max-width: 1250px;       
+            margin: 0 auto 40px auto; 
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border: 1px solid #eaeaea;
+            height: 350px;  
+            min-height: 350px; 
+            max-height: 350px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .viagem-container:hover {
+            transform: translateY(-5px); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+        }
+
+        .viagem-capa {
+            flex: 1;            
+            height: 100%;        
+        }
+
+        .viagem-capa img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .viagem-info {
+            flex: 1.3;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .viagem-info h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem;
+            color: #5d4037;
+            margin: 0 0 15px 0;
+        }
+
+        .viagem-botoes {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-galeria, .btn-itinerario {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .btn-galeria {
+            background: white;
+            border: 1px solid #5d4037;
+            color: #5d4037;
+        }
+
+        .btn-galeria:hover {
+            background: #fdfaf6;
+        }
+
+        .btn-itinerario {
+            background-color: #5d4037;
+            color: #fdfaf6;
+            border: 1px solid #5d4037;
+        }
+
+        .btn-itinerario:hover {
+            background-color: #4a322c;
+        }
+
+        .viagem-container:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .viagem-container:nth-child(even) .viagem-capa img {
+            border-radius: 0 30px 30px 0;
+        }
+
+        .viagem-container:nth-child(odd) .viagem-capa img {
+            border-radius: 30px 0 0 30px;
+        }
+
+
+        /* GALERIA (POP-UP) */
+        .modal-galeria {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(214, 214, 214, 0.80);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content { position: relative; max-width: 80%; max-height: 80%; }
+        .modal-content img { max-width: 100%; max-height: 80vh; border: 3px solid #fff; }
+
+        .close-modal, .prev, .next {
+            position: absolute;
+            color: white;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .close-modal {
+            position: fixed; 
+            top: 30px;
+            right: 30px;
+            width: 45px;
+            height: 45px;
+            background-color: white; 
+            color: #5d4037;        
+            border-radius: 50%;    
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            font-family: Arial, sans-serif;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 3000;        
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: 0.3s;
+        }
+
+        .close-modal:hover {
+            background-color: #d2b48c;
+            color: white;
+            transform: scale(1.1);
+        }
+        .prev { left: -60px; top: 50%; transform: translateY(-50%); }
+        .next { right: -60px; top: 50%; transform: translateY(-50%); }
+
+
+        /* ITENERARIO (POP-UP) */
+        #modalItinerario {
+            display: none;
+            position: fixed;
+            z-index: 2500;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.1); 
+            backdrop-filter: blur(8px); 
+            justify-content: center;
+            align-items: center;
+        }
+
+        #modalItinerario .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 30px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;    
+            overflow-y: auto;    
+            position: relative;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        #modalItinerario .close-modal {
+            background-color: #5d4037; 
+            color: white;             
+        }
+
+
+        /* SECÇÃO - BUCKET LIST */
+        .bucket-list-layout .titulo-seccao {
+            display: block;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #6f5148;
+            margin-bottom: 50px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .bucket-list-layout .titulo-seccao::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: #d2b48c; 
+        }
+
+        .bucket-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-auto-rows: 200px;
+            gap: 20px; 
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .bucket-card {
+            position: relative;
+            border-radius: 25px; 
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+        }
+
+        .a1 { grid-column: 1; grid-row: 1; }
+        .a2 { grid-column: 2 / span 2; grid-row: 1; }
+        .a3 { grid-column: 4; grid-row: 1; }
+
+        .b1 { grid-column: 1; grid-row: 2; }
+        .tailandia { grid-column: 2 / span 2; grid-row: 2; }
+        .b2 { grid-column: 4; grid-row: 2; }
+
+        .c1 { grid-column: 1; grid-row: 3; }
+        .c2 { grid-column: 2 / span 2; grid-row: 3; }
+        .c3 { grid-column: 4; grid-row: 3; }
+
+        .bucket-card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .bucket-card h3 {
+            position: absolute;
+            bottom: 15px;
+            width: 100%;
+            text-align: center;
+            color: white;
+            font-size: 1rem;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+            margin: 0;
+        }
+
+        .tailandia h3 {
+            font-size: 1.6rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .bucket-card:hover img {
+            transform: scale(1.1);
+            transition: 0.5s;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            opacity: 0.6; 
+            transition: all 0.3s ease;
+        }
+        .bucket-list li {
+        cursor: pointer;
+        list-style: none;
+        padding: 10px;
+        user-select: none; 
+        }
+
+        /*SECÇÃO - ESSENTIALS */
+        .seccao-essentials-full {
+            background-color: #846157;
+            width: 100%;
+            padding: 80px 0;
+            margin: 0;   
+            padding-top: 30px;    
+            padding-bottom: 40px;
+        }
+
+        .essentials-container {
+            max-width: 1250px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .titulo-branco {
+            display: block;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            color: #f4f1ea; 
+            margin-bottom: 50px;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .titulo-branco::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background-color: #d2b48c; 
+        }
+
+        .essentials-grid {
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .essentials-item {
+            flex: 1;
+            min-width: 250px;
+            text-align: center;
+        }
+
+        .essentials-item h3 {
+            font-family: 'Playfair Display', serif;
+            color: #d2b48c;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(210, 180, 140, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .essentials-item ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .essentials-item ul li {
+            font-family: 'Lato', sans-serif;
+            color: #f4f1ea; 
+            font-size: 1rem;
+            line-height: 2.2;
+            transition: 0.3s;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .essentials-item ul li:hover {
+            color: #d2b48c; 
+            transform: translateX(5px);
+        }
+
+        .icon-placeholder svg {
+            stroke: #d2b48c;
+        }
+
+        .essentials-item ul li.completed {
+            text-decoration: line-through;
+            color: #d2b48c; 
+            opacity: 0.5;   
+        }
+
+
+        /* SECÇÃO FINAL -  MAPA E QUOTE*/
+        .mapa-fundo-escuro {
+            width: 100%;
+            height: 60vh;
+            background-color: #846157; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mapa-fundo-escuro::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('Imagens/world.svg'); 
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: 40%;
+            filter: invert(1) brightness(0.8);
+            opacity: 0.15;
+            z-index: 1;
+        }
+
+        .conteudo-final {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            color: #d2b48c;
+            font-family: 'Montserrat', sans-serif;
+            padding: 20px;
+        }
+
+        .conteudo-final p {
+            margin: 5px 0;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+
+        /* FOOTER */
+        footer {
+            background-color: #5d4037;
+            color: #fdfaf6;
+            text-align: center;
+            padding: 30px 10px;
+            margin-top: 50px;
+        }
+
+        footer p {
+            font-family: 'Digital', serif;
+            font-size: 1.4rem;
+            font-style: italic;
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        footer::before {
+            content: '';
+            display: block;
+            width: 50px; height: 1px;
+            background-color: #d2b48c;
+            margin: 0 auto 20px auto;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="header-mapa">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-side nav-left">
+                    <a href="#essentials">Travel Essentials</a>
+                </div>
+                <a href="#travels" class="nav-center">Travels</a>
+                <div class="nav-side nav-right">
+                    <a href="#bucketlist">Bucket list</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="background-mapa"></div>
+        <h1 class="titulo-travel">Travel Files</h1>
+    </header>
+
+    <div class="container">
+
+        <section id="boarding-pass" class="seccao-boarding-premium">
+            <div class="boarding-card-v2">
+                <div class="boarding-body">
+                    
+                    <div class="boarding-header-top">
+                        <div class="airline-brand">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-8-8-4 20-7z"></path></svg>
+                            <span>WORLDS AIR</span>
+                        </div>
+                        <div class="ticket-status">BOARDING PASS</div>
+                    </div>
+
+                    <div class="boarding-middle">
+                        <div class="passenger-details">
+                            <div class="data-block">
+                                <label>PASSENGER</label>
+                                <h3>FILIPA PINTO</h3>
+                            </div>
+                            <div class="flight-path-v2">
+                                <div class="airport">
+                                    <h3>OPO</h3>
+                                    <p>Porto, PT</p>
+                                </div>
+                                <div class="flight-route-visual">
+                                    <span class="dot"></span>
+                                    <span class="path-line"></span>
+                                    <span class="path-plane">✈</span>
+                                    <span class="path-line"></span>
+                                    <span class="dot"></span>
+                                </div>
+                                <div class="airport">
+                                    <h3>WRLD</h3>
+                                    <p>Anywhere</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flight-specifics">
+                            <div class="data-block">
+                                <label>STATUS</label>
+                                <h3 class="status-ready">Ready to Fly</h3>
+                            </div>
+                            <div class="data-block">
+                                <label>CLASS</label>
+                                <h3>Explorer</h3> </div>
+                            <div class="data-block">
+                                <label>GATE</label>
+                                <h3>W11</h3> </div>
+                            <div class="data-block">
+                                <label>SEAT</label>
+                                <h3>1A</h3> </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="boarding-stub-v2">
+                    <div class="stub-time-counter">
+                        <label>Days since Last Trip</label>
+                        <div class="large-counter">
+                            <h3 id="days-counter-v2">---</h3>
+                            <p>February 2025</p>
+                        </div>
+                    </div>
+                    <div class="stub-icon">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d2b48c" stroke-width="1"><path d="M4.268 4.268A4.1 4.1 0 017 3h10a4.1 4.1 0 012.732 1.268M2 10a2 2 0 012-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V10z"></path><path d="M16 14h2M12 14h.01M6 14h2"></path></svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="essentials" class="seccao-essentials-full">
+            <div class="essentials-container">
+                <h2 class="titulo-branco">Travel Essentials</h2>
+                
+                <div class="essentials-grid">
+                    <div class="essentials-item">
+                        <div class="icon-placeholder">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#d2b48c" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                        </div>
+                        <h3>Your Best Looks</h3>
+                        <ul>
+                            <li>T-shirts and Shorts</li>
+                            <li>Swimsuit</li>
+                            <li>Sandals and Hat</li>
+                            <li>Thermal Clothing</li>
+                            <li>Heavy Coat</li>
+                            <li>Comfortable Footwear</li>
+                        </ul>
+                    </div>
+
+                    <div class="essentials-item">
+                        <div class="icon-placeholder">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#d2b48c" stroke-width="2"><path d="M20 7h-9l-3-3H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"></path></svg>
+                        </div>
+                        <h3>Hygiene</h3>
+                            <ul>
+                                <li>Toothbrush and Toothpaste</li>
+                                <li>Deodorant</li>
+                                <li>Sunscreen</li>
+                                <li>Lip Balm</li>
+                                <li>Hand Sanitizer</li>
+                                <li>First Aid Kit</li>
+                                <li>(Emergency Pills)</li>
+                            </ul>
+                    </div>
+
+                    <div class="essentials-item">
+                        <div class="icon-placeholder">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#d2b48c" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                        </div>
+                        <h3>Extras</h3>
+                            <ul>
+                                <li>Phone and Chargers</li>
+                                <li>Power Bank</li>
+                                <li>Universal Adapter</li>
+                                <li>Camera and SD Cards</li>
+                                <li>Kindle / Book</li>
+                                <li>Reusable Bottle</li>
+                            </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="travels" class="seccao-arquivo">
+            <h2>My Travels</h2>
+
+        <div class="viagem-container">
+            <div class="viagem-capa">
+                <img src="Imagens/Lcapa.jpg" alt="Londres">
+            </div>
+
+            <div class="viagem-info">
+                <h3>London</h3>
+                <p>My last Trip. It was actually my favourite. I still have a lot to know about London. I was there for 4 days and still could not see everythig. I hope to go there again in the near future.</p>
+                
+                <div class="viagem-botoes">
+                    <button class="btn-galeria" onclick="abrirGaleria('London', 26)">View Gallery</button>
+                    <a href="javascript:void(0)" onclick="abrirItinerario('London')" class="btn-itinerario">View Itinerary</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="viagem-container">
+            <div class="viagem-capa">
+                <img src="Imagens/Mcapa.jpg" alt="Milan">
+            </div>
+
+            <div class="viagem-info">
+                <h3>Milan</h3>
+                <p>I spent my 20th birthday in Milan. It's something I will never forget. Actualy it was very funny cause the train broke down and I spent aout 3 hours of my bithday in the midle of nowhere, at the time I was sad but now I just find it funny! </p>
+                
+                <div class="viagem-botoes">
+                    <button class="btn-galeria" onclick="abrirGaleria('Milan', 24)">View Gallery</button>
+                    <a href="javascript:void(0)" onclick="abrirItinerario('Milan')" class="btn-itinerario">View Itinerary</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="viagem-container">
+            <div class="viagem-capa">
+                <img src="Imagens/Bcapa.jpg" alt="Barcelona">
+            </div>
+
+            <div class="viagem-info">
+                <h3>Barcelona</h3>
+                <p>It was my graduation trip from high scholl. I had a memorable time, it was an amazing expirience wich I will never forget. I thin I have never walked so mutch in my life!</p>
+                
+                <div class="viagem-botoes">
+                    <button class="btn-galeria" onclick="abrirGaleria('Barcelona', 4)">View Gallery</button>
+                    <a href="javascript:void(0)" onclick="abrirItinerario('Barcelona')" class="btn-itinerario">View Itinerary</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="viagem-container">
+            <div class="viagem-capa">
+                <img src="Imagens/Pcapa.jpg" alt="Paris">
+            </div>
+
+            <div class="viagem-info">
+                <h3>Paris</h3>
+                <p>Paris was my first big trip. I went there when I was in the nineth grade with school. Because I was so young there's not a lot of photos but I remember it like it was yesterday. I actualy got to see the Notre-Bame in the morning before the fire in teh afternoon witch was a fortune. </p>
+                
+                <div class="viagem-botoes">
+                    <button class="btn-galeria" onclick="abrirGaleria('Paris', 2)">View Gallery</button>
+                    <a href="javascript:void(0)" onclick="abrirItinerario('Paris')" class="btn-itinerario">View Itinerary</a>
+                </div>
+            </div>
+        </div>
+
+        </section>
+
+        <div class="mapa-fundo-escuro">
+            <div class="conteudo-final">
+                <h2 style="font-family: 'Playfair Display', serif; font-style: italic;">"You can't buy happiness,</h2>
+                <h2 style="font-family: 'Playfair Display', serif; font-style: italic;">but you can buy a plane ticket,</h2>
+                <h2 style="font-family: 'Playfair Display', serif; font-style: italic;">and that's kind of the same thing."</h2>
+            </div>
+        </div>
+
+        <section id="bucketlist" class="bucket-list-layout">
+            <div class="container-titulo">
+                <h2 class="titulo-seccao">Bucket List</h2>
+            </div>
+            <div class="bucket-grid">
+                <div class="bucket-card a1"><img src="Imagens/Bucket/irla.webp"><h3>Ireland</h3></div>
+                <div class="bucket-card a2"><img src="Imagens/Bucket/edi.webp"><h3>Edinburgh</h3></div>
+                <div class="bucket-card a3"><img src="Imagens/Bucket/cana.jpg"><h3>Canada Mountains</h3></div>
+                
+                <div class="bucket-card b1"><img src="Imagens/Bucket/lapo.avif"><h3>Lapland</h3></div>
+                
+                <div class="bucket-card tailandia">
+                    <img src="Imagens/Bucket/tai.webp">
+                    <div class="info-centro">
+                        <h3>Thailand</h3>
+                    </div>
+                </div>
+
+                <div class="bucket-card b2"><img src="Imagens/Bucket/isla.jpg"><h3>Iceland</h3></div>
+                
+                <div class="bucket-card c1"><img src="Imagens/Bucket/japa.jpg"><h3>Japan</h3></div>
+                <div class="bucket-card c2"><img src="Imagens/Bucket/ita.jpg"><h3>Mezzogiorno</h3></div>
+                <div class="bucket-card c3"><img src="Imagens/Bucket/ny.jpg"><h3>New York</h3></div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>I googled my symptoms. Turns out I just need a vacation</p>
+    </footer>
+
+    <div id="meuModal" class="modal-galeria">
+        <span class="close-modal" onclick="fecharModal()">&times;</span>
+        
+        <div class="modal-content">
+            <img id="imagemModal" src="">
+            <a class="prev" onclick="mudarSlide(-1)">&#10094;</a>
+            <a class="next" onclick="mudarSlide(1)">&#10095;</a>
+        </div>
+    </div>
+
+    <div id="modalItinerario" class="modal-galeria">
+        <span class="close-modal" onclick="fecharItinerario()">&times;</span>
+        <div class="modal-content" style="background: white; padding: 40px; border-radius: 20px; max-width: 600px; color: #5d4037;">
+            <h2 id="tituloItinerario" style="font-family: 'Playfair Display';"></h2>
+            <p id="textoItinerario" style="line-height: 1.8; white-space: pre-line;"></p>
+        </div>
+    </div>
+
+    <script>
+
+        /*Riscar lista*/
+        const items = document.querySelectorAll('.essentials-item ul li');
+
+        items.forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('completed');
+            });
+        });
+        
+        /*Contagem Dias*/
+        const lastTripDate = new Date('2025-02-01');
+        const currentDay = new Date();
+
+        const diffInTime = Math.abs(currentDay - lastTripDate);
+        const diffInDays = Math.ceil(diffInTime / (1000 * 60 * 60 * 24));
+
+        document.getElementById('days-counter-v2').innerText = diffInDays + " DAYS";
+
+        /*Imagens Galeria*/
+        let imagensAtuais = [];
+        let indiceAtual = 0;
+
+        function abrirGaleria(pasta, quantidade) {
+            imagensAtuais = [];
+            for (let i = 1; i <= quantidade; i++) {
+                imagensAtuais.push(`Imagens/${pasta}/${i}.jpg`);
+            }
+            
+            indiceAtual = 0; 
+            document.getElementById("meuModal").style.display = "flex";
+            mostrarImagem();
+        }
+
+        function mudarSlide(direcao) {
+            indiceAtual += direcao;
+            
+            if (indiceAtual >= imagensAtuais.length) {
+                indiceAtual = 0; 
+            } else if (indiceAtual < 0) {
+                indiceAtual = imagensAtuais.length - 1; 
+            }
+            
+            mostrarImagem();
+        }
+
+        function mostrarImagem() {
+            const imgElement = document.getElementById("imagemModal");
+            console.log("A tentar mostrar a imagem no índice: " + indiceAtual + " -> Caminho: " + imagensAtuais[indiceAtual]);
+            imgElement.src = imagensAtuais[indiceAtual];
+        }
+
+        function fecharModal() {
+            document.getElementById("meuModal").style.display = "none";
+        }
+
+        /*Itenerário*/
+        function abrirItinerario(cidade) {
+            const itinerarios = {
+                'Barcelona': `
+                    <strong> Dia 1: A Essência do Centro Histórico</strong><br>
+                    <strong>Manhã:</strong> Comece na Plaça de Catalunya e desça as Ramblas. Faça um desvio para o Mercado da Boqueria.<br>
+                    <strong>Tarde:</strong> Explore o Bairro Gótico, a Catedral e a Ponte del Bisbe. Termine em El Born e no Museu Picasso.<br>
+                    <strong>Noite:</strong> Jantar de tapas no Born.<br><br>
+
+                    <strong> Dia 2: O Legado de Gaudí e Modernismo</strong><br>
+                    <strong>Manhã:</strong> Sagrada Família (reserva antecipada obrigatória!) e Hospital de Sant Pau.<br>
+                    <strong>Tarde:</strong> Passeig de Gràcia: Casa Batlló ou Casa Milà/La Pedrera.<br>
+                    <strong>Noite:</strong> Espetáculo de Flamenco no Palau de la Música.<br><br>
+
+                    <strong> Dia 3: Vistas Panorâmicas e Brisa Marinha</strong><br>
+                    <strong>Manhã:</strong> Park Güell à abertura para evitar multidões.<br>
+                    <strong>Tarde:</strong> Barceloneta, almoço de paella e passeio pelo Porto Olímpico ou Parque da Ciutadella.<br>
+                    <strong>Noite:</strong> Bunkers del Carmel para o pôr do sol 360°.<br><br>
+
+                    <strong> Dia 4: Montjuïc ou Bate-volta a Montserrat</strong><br>
+                    <strong>Opção A:</strong> Montanha de Montjuïc, teleférico, Fundação Joan Miró e Castelo.<br>
+                    <strong>Opção B:</strong> Excursão ao Mosteiro de Montserrat (1h de comboio).`,
+
+                'London': `
+                <strong> 1º Dia: Ícones e Margem Sul</strong><br>
+                <strong>Manhã/Tarde:</strong> Chegada (12h45), Tower Bridge e Tower of London.<br>
+                <strong>Pôr do Sol:</strong> The Garden at 120 (estar lá às 16h15) e visita a Canary Wharf.<br><br>
+
+                <strong> 2º Dia: Palácios, Museus e Mercados</strong><br>
+                <strong>Manhã:</strong> Kensington Palace e Gardens, Hyde Park e Museu de História Natural (reserva 11h15).<br>
+                <strong>Almoço:</strong> Fish & Chips no "The Mayfair Chippy".<br>
+                <strong>Tarde:</strong> Bairro Harrods, Notting Hill (Portobello Road) e King's Cross (Plataforma 9¾).<br>
+                <strong>Noite:</strong> Jantar/petiscos no Camden Market.<br><br>
+
+                <strong> 3º Dia: O Coração de Westminster e Soho</strong><br>
+                <strong>Manhã:</strong> Buckingham Palace, St. James's Park, Westminster Abbey e Big Ben.<br>
+                <strong>Tarde:</strong> London Eye, Graffiti Tunnel, Trafalgar Square e National Gallery.<br>
+                <strong>Noite:</strong> Convent Garden (Apple Market), Soho, Chinatown e Piccadilly Circus.<br><br>
+
+                <strong> 4º Dia: City e Despedida</strong><br>
+                <strong>Manhã:</strong> Southwark Cathedral, Millennium Bridge e St. Paul's Cathedral.<br>
+                <strong>11h00:</strong> The Lookout (vista panorâmica) e almoço no Borough Market.`,
+
+            'Milan': `
+                <strong> Dia 1: Brera e Castelo</strong><br>
+                <strong>Manhã:</strong> Café na Gelsomina, passeio por Brera e visita à Biblioteca Braidense. <br>
+                <strong>Almoço:</strong> Osteria da Fortunata ou Da Zero. <br>
+                <strong>Tarde:</strong> Castello Sforzesco, Parco Sempione, Fontana di Piazza Castello e Arco della Pace. <br><br>
+
+                <strong> Dia 2: Bate-volta a Turim</strong><br>
+                Dia inteiro dedicado a Turim: Mole Antonelliana, Piazza Castello e Palazzo Reale. <br><br>
+
+                <strong> Dia 3: Bate-volta a Verona e Navigli</strong><br>
+                <strong>Dia:</strong> Visita a Verona (Arena, Casa de Julieta e Castel San Pietro). <br>
+                <strong>Noite:</strong> Jantar e passeio no bairro de Navigli. <br><br>
+
+                <strong> Dia 4: Duomo e Compras</strong><br>
+                <strong>Manhã:</strong> Catedral de Milão (reserva 10h), Palácio Real e Museo del Novecento. <br>
+                <strong>Tarde:</strong> Galleria Vittorio Emanuele II (mosaico do touro) e Teatro alla Scala. `,
+
+                'Paris': `
+                <strong> Dia 1: O Charme Medieval e a Dama de Ferro</strong><br>
+                <strong>Manhã:</strong> Île de la Cité, Notre-Dame (reaberta!) e Sainte-Chapelle. Mercado das Flores.<br>
+                <strong>Tarde:</strong> Bairro Latino, Panteão e Museu d'Orsay.<br>
+                <strong>Noite:</strong> Trocadéro ao pôr do sol. Torre Eiffel (reserva para as 21:00) e Champ de Mars.<br><br>
+
+                <strong> Dia 2: Arte Real e o Eixo Histórico</strong><br>
+                <strong>Manhã:</strong> Museu do Louvre (Mona Lisa e Vénus de Milo) e Jardim das Tulherias.<br>
+                <strong>Tarde:</strong> Place de la Concorde, Champs-Élysées e Arco do Triunfo (subida ao topo).<br>
+                <strong>Noite:</strong> Jantar em Saint-Germain-des-Prés.<br><br>
+
+                <strong> Dia 3: Boémia e o Coração "Trendy"</strong><br>
+                <strong>Manhã:</strong> Montmartre, Sacré-Cœur e Place du Tertre. Muro do "Amo-te".<br>
+                <strong>Tarde:</strong> Le Marais, Place des Vosges e Museu Picasso.<br>
+                <strong>Noite:</strong> Cruzeiro no Rio Sena (Bateaux-Mouches).<br><br>
+
+                <strong> Dia 4: Realeza em Versalhes ou Museus d'Elite</strong><br>
+                <strong>Opção A:</strong> Palácio de Versalhes e Jardins (RER C).<br>
+                <strong>Opção B:</strong> Museu d’Orsay, Opéra Garnier e Galerias Lafayette.<br>
+                <strong>Noite:</strong> Jantar num Bouillon típico (Julien ou Chartier).`,
+            };
+
+            const conteudo = itinerarios[cidade] || "Itinerário em breve!";
+            
+            document.getElementById("tituloItinerario").innerText = "Itinerário: " + cidade;
+            document.getElementById("textoItinerario").innerHTML = conteudo; 
+            document.getElementById("modalItinerario").style.display = "flex";
+        }
+
+        function fecharItinerario() {
+            document.getElementById("modalItinerario").style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            const modalItin = document.getElementById("modalItinerario");
+            const modalGal = document.getElementById("meuModal");
+
+            if (event.target == modalItin) {
+                fecharItinerario();
+            }
+            
+            // Se clicar fora do conteúdo da Galeria, fecha a Galeria
+            //if (event.target == modalGal) {
+                //fecharModal(); // Aqui sim, usas o nome da função da galeria
+            //}
+        }
+    
+    </script>
+</body>
+</html>

@@ -1,0 +1,32 @@
+# TPC4 - Página HTML de Viagens (Travel Files)
+
+Este trabalho consiste numa página web interativa dedicada à exploração de destinos turísticos e organização de itinerários.
+
+O projeto utiliza uma estrutura "Single Page", onde o conteúdo é gerido dinamicamente através de JavaScript.
+
+# Estrutura de Modais Dinâmicos
+A página utiliza um sistema de janelas sobrepostas (modais) para exibir os planos detalhados de cada cidade, evitando a criação de múltiplos ficheiros HTML.
+- **Solução:** Implementou-se a função `abrirItinerario(cidade)`, que altera o estado do elemento para `display: flex`, permitindo uma visualização focada no conteúdo escolhido.
+
+# Gestão de Conteúdo via Objetos
+Para facilitar a manutenção e organização dos roteiros, os dados das viagens foram estruturados num objeto literal em JavaScript.
+- **Melhoria:** O uso de uma variável `itinerarios` (formato chave-valor) permite que o conteúdo de cada destino seja injetado dinamicamente no modal, garantindo que a estrutura HTML permanece limpa e fácil de atualizar.
+
+# Design e Estilização "Boarding Pass"
+Foi desenvolvida uma secção visualmente apelativa que simula um bilhete de embarque real, utilizando propriedades avançadas de CSS.
+- **Técnica:** Utilização de `border-radius`, `box-shadow` e fontes específicas (*Montserrat* e *Lato*) para criar a estética de um ticket de avião, reforçando o tema da página através do design.
+
+# Lógica de Fecho Inteligente
+Para melhorar a usabilidade, o script foi configurado para detetar interações fora da área de conteúdo principal.
+- **Implementação:** Através de `window.onclick`, o sistema verifica se o clique do utilizador ocorreu no fundo do modal (`modalItinerario`). Caso se confirme, a janela fecha-se automaticamente, tornando a navegação mais intuitiva.
+
+
+## Fluxo de tratamento do documento
+
+A página `Viagens.html` processa a informação seguindo estas etapas:
+
+1. **Renderização Inicial:** Carregamento do layout responsivo com uma barra de navegação fixa para acesso rápido às secções.
+2. **Navegação por Âncoras:** Utilização de `scroll-behavior: smooth` para deslizar suavemente entre a galeria e os destinos.
+3. **Seleção de Destino:** O utilizador interage com os botões de itinerário, disparando a procura da informação no "dicionário" JavaScript.
+4. **Injeção de Conteúdo:** O texto formatado com etiquetas HTML é inserido dinamicamente via `.innerHTML` no corpo do modal.
+5. **Visualização de Galeria:** Apresentação visual dos destinos através de uma grelha de imagens organizada.
