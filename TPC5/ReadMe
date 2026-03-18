@@ -1,0 +1,30 @@
+# TPC5 - Descrição completa
+
+Este trabalho consiste num script de recolha automática de dados, desenvolvido para extrair e organizar informações médicas detalhadas de forma automatizada. O script navega autonomamente por cada link de cada doença.
+
+# Estrutura de Navegação Alfabética
+O script utiliza a biblioteca "string" para percorrer automaticamente todas as letras do abecedário, construindo URLs dinâmicas para cada secção do site.
+-Solução: Implementou-se um ciclo "for letra in abcedario", que permite ao scraper visitar as 26 páginas de listagem do portal sem intervenção manual, concatenando a letra ao URL base.
+
+# Transição para Scraping 'Profundo'
+Ao contrário do código desenvolvido na aula, que apenas lia a lista principal, esta versão do TPC realiza uma navegação em profundidade para obter o conteúdo integral.
+- Assim: O script identifica o atributo "href" de cada doença e realiza um novo "requests.get()" para a página interna de cada patologia. Isto permite preencher o campo "full_desc" com o texto completo do artigo, em vez de um simples resumo da página principal.
+
+# Estrutura de Dados 
+Para uma melhor organização e consulta da informação, os dados deixaram de ser um par chave-valor simples e passaram a ser um dicionário estruturado.
+- Técnica: Cada entrada de doença contém agora um dicionário interno com as chaves "Descrição_Resumida" (resumo) e "Descrição_Completa" (conteúdo da página interna).
+
+# Persistência 
+Para garantir a integridade dos dados, o processo de escrita do ficheiro foi otimizado para evitar erros de leitura.
+- Implementação: O ficheiro "doencasCompleto.json" é aberto explicitamente com "encoding='utf8'" e o comando "json.dump" utiliza "ensure_ascii=False", permitindo que caracteres como "ç" ou "ã" sejam guardados de forma legível.
+
+
+## Fluxo de tratamento dos dados
+
+O script processa a informação seguindo estas etapas:
+
+1. Gerar URL: O programa conecta a base do site com a letra correspondente do abecedário (ex: /doencasaaz/a).
+2. Parsing da Listagem: O BeautifulSoup localiza todos os blocos "views-row" que contêm os títulos e links das doenças na página da letra.
+3. Extração de Metadados: Captura-se a designação (título) e o pequeno resumo que já estão visíveis na listagem inicial.
+4. Navegação Profunda: O scraper segue o link da doença, faz um novo pedido HTTP e extrai o texto do corpo principal (field-name-body).
+5. Consolidação: Os dados de todas as letras são agregados num dicionário final e exportados para um ficheiro JSON estruturado e indentado.
