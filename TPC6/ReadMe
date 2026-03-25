@@ -1,0 +1,33 @@
+# TPC6 - Relações de Personagens 
+O script analisa a coocorrência de entidades mencionadas na mesma frase para construir uma rede de relações.
+
+
+## Motor de Processamento (spaCy)
+O script utiliza o modelo de linguagem `pt_core_news_lg` da biblioteca **spaCy**, que oferece um pipeline robusto para tokenização e análise linguística.
+- Solução: O texto é carregado e processado num `doc`, permitindo que o script identifique nomes próprios através de Reconhecimento de Entidades Mencionadas (NER).
+
+## Extração de Entidades com Matcher
+Usa-se o `Matcher` para definir padrões linguísticos específicos.
+- Técnica: Foi implementado um padrão (`pattern`) que procura sequências de tokens identificados como PER (Pessoa). O operador `"OP": "+"` garante que nomes compostos (ex: "Albus Dumbledore") sejam capturados como uma única entidade.
+
+## Lógica de Coocorrência e Filtragem
+Para garantir a qualidade dos dados e evitar ruído, o script aplica filtros lógicos antes de registar uma relação:
+- Filtros: Apenas nomes com mais de 2 caracteres e que comecem com letra maiúscula são aceites.
+- Interação: O script percorre frase a frase (`doc.sents`). Se dois ou mais personagens aparecem na mesma frase, assume-se uma relação entre eles.
+
+## Estrutura de Dados (Matriz de Adjacência)
+Para organizar as interações, utilizou-se um dicionário aninhado (`defaultdict`), facilitando a contagem de frequências.
+- Formato: Os dados são guardados como uma rede onde cada personagem é uma chave que contém outro dicionário com os seus "vizinhos" e o número de coocorrências.
+
+## Persistência 
+Para garantir a integridade e legibilidade dos dados extraídos, o processo de escrita foi otimizado:
+- Implementação: O ficheiro `friends.json` é gerado com `encoding='utf-8'` e o comando `json.dump` utiliza `ensure_ascii=False`, permitindo que caracteres como "ç" ou "ã" sejam guardados corretamente.
+
+
+## Fluxo de tratamento dos dados
+
+1. Carregamento: Inicialização do modelo `pt_core_news_lg` e leitura do ficheiro `.txt`.
+2. Parsing de Sentenças: O spaCy divide o texto em frases para analisar o contexto imediato.
+3. Deteção de Padrões: O `Matcher` localiza todas as entidades do tipo "PER" em cada frase.
+4. Mapeamento: O script executa uma permutação entre os nomes encontrados, incrementando o peso da ligação no dicionário.
+5. Exportação: Os dados são consolidados num ficheiro JSON estruturado e indentado.
