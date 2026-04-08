@@ -1,0 +1,18 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+    <title>MedicoLearn · Erro</title>
+{% endblock %}
+
+{% block body %}
+
+    <div class="container my-5 text-center">
+        <div class="display-1 mb-3"></div>
+        <h2 class="fw-bold text-danger">Ups! Algo correu mal.</h2>
+        <p class="fs-5 text-muted mt-3">{{ erro }}</p>
+        <a href="/conceitos" class="btn btn-lg fw-bold text-white rounded-pill px-5 mt-3" style="background: linear-gradient(90deg, #6a11cb, #2575fc);">
+            ← Voltar à lista
+        </a>
+    </div>
+
+{% endblock %}

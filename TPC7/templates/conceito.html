@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+    <title>MedicoLearn · {{ designacao }}</title>
+{% endblock %}
+
+{% block body %}
+
+    <div class="text-white text-center py-4" style="background: linear-gradient(135deg, #6a11cb, #2575fc);">
+        <div class="container">
+            <h2 class="fw-bold mb-1">{{ designacao }}</h2>
+            <p class="mb-0 text-white-50">Definição do conceito médico</p>
+        </div>
+    </div>
+
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+
+                <div class="card shadow border-0">
+                    <div class="card-header fw-bold fs-5" style="background: linear-gradient(90deg, #6a11cb, #2575fc); color: white;">
+                        Definição
+                    </div>
+                    <div class="card-body p-4">
+                        <p class="card-text fs-5">{{ descricao }}</p>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="/conceitos" class="btn btn-lg fw-bold text-white rounded-pill px-5" style="background: linear-gradient(90deg, #6a11cb, #2575fc);">
+                        ← Voltar à lista
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

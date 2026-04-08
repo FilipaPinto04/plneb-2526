@@ -1,0 +1,58 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+    <title>Dicionário Médico</title>
+{% endblock %}
+
+{% block body %}
+
+    <div class="text-white text-center py-5" style="background: linear-gradient(135deg, #6a11cb, #2575fc);">
+        <div class="container py-4">
+            <div class="display-4 mb-3">🩺</div>
+            <h1 class="display-3 fw-bold">Dicionário Médico</h1>
+            <p class="card-text text-muted" style="color: #e3dfe8 !important;">Aceda a conceitos médicos mais rápido!</p>        
+        </div>
+    </div>
+
+    <div class="container my-5">
+        <h2 class="text-center fw-bold mb-4" style="color: #6a11cb;">O que podes fazer aqui?</h2>
+        <div class="row g-4">
+
+            <div class="col-md-4">
+                <div class="card h-100 shadow border-0 text-center">
+                    <div class="card-body p-4">
+                        <h5 class="card-title fw-bold">Lista de Conceitos</h5>
+                        <p class="card-text text-muted">Explora todos os termos médicos disponíveis no dicionário.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 shadow border-0 text-center">
+                    <div class="card-body p-4">
+                        <h5 class="card-title fw-bold">Definições Precisas</h5>
+                        <p class="card-text text-muted">Cada conceito tem uma definição clara e rigorosa.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 shadow border-0 text-center">
+                    <div class="card-body p-4">
+                        <h5 class="card-title fw-bold">Pesquisa Personalizada</h5>
+                        <p class="card-text text-muted">Acede mais rápido a um conceito que estejas em dúvida.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="text-center py-5" style="background: #f0f4ff;">
+        <h3 class="fw-bold mb-3">Conhecer mais?</h3>
+        <a href="/conceitos" class="btn btn-lg fw-bold text-white rounded-pill px-5" style="background: linear-gradient(90deg, #6a11cb, #2575fc);">
+            Ver todos os conceitos
+        </a>
+    </div>
+
+{% endblock %}
