@@ -1,0 +1,162 @@
+{% extends 'layout.html' %}
+
+{% block head %}
+    <title>Pesquisar</title>
+    <style>
+        .search-wrapper {
+            max-width: 700px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .search-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.5px;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border: 1.5px solid #d0d7de;
+            border-radius: 12px;
+            padding: 0.5rem 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: border-color 0.2s, box-shadow 0.2s;
+            margin-bottom: 1rem;
+        }
+
+        .search-box:focus-within {
+            border-color: #4361ee;
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.12);
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            flex: 1;
+            background: transparent;
+            color: #1a1a2e;
+            padding: 0.3rem 0.5rem;
+        }
+
+        .search-box input::placeholder {
+            color: #9ca3af;
+        }
+
+        .search-box i {
+            color: #9ca3af;
+            font-size: 1.1rem;
+        }
+
+        .search-options {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .option-pill {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: #f3f4f6;
+            border: 1.5px solid transparent;
+            border-radius: 50px;
+            padding: 0.35rem 0.9rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            color: #4b5563;
+            transition: all 0.2s;
+            user-select: none;
+            margin: 0;
+        }
+
+        .option-pill input[type="checkbox"] {
+            accent-color: #4361ee;
+            width: 15px;
+            height: 15px;
+            cursor: pointer;
+        }
+
+        .option-pill:has(input:checked) {
+            background: #eef0fd;
+            border-color: #4361ee;
+            color: #4361ee;
+            font-weight: 500;
+        }
+
+        .option-pill:hover {
+            background: #e9ebfc;
+            border-color: #a5b4fc;
+        }
+
+        #resultados .list-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        #resultados .list-group-item {
+            border: 1.5px solid #e5e7eb !important;
+            border-radius: 10px !important;
+            padding: 0.85rem 1.1rem;
+            color: #1a1a2e;
+            text-decoration: none;
+            transition: all 0.15s;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            background: #fff;
+            display: block;
+        }
+
+        #resultados .list-group-item:hover {
+            border-color: #4361ee !important;
+            background: #f5f6ff;
+            box-shadow: 0 2px 8px rgba(67,97,238,0.08);
+            transform: translateY(-1px);
+        }
+
+        #resultados .list-group-item strong {
+            color: #4361ee;
+            font-weight: 600;
+        }
+
+        #resultados .sem-resultados {
+            text-align: center;
+            color: #9ca3af;
+            padding: 2rem 0;
+            font-size: 0.95rem;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+<div class="search-wrapper">
+    <h1 class="search-title">
+        Pesquisar conceitos
+    </h1>
+
+    <div class="search-box">
+        <i class="bi bi-search"></i>
+        <input type="text" id="campoPesquisa" placeholder="Escreve um termo médico...">
+    </div>
+
+    <div class="search-options">
+        <label class="option-pill">
+            <input type="checkbox" id="exactMatch">
+            Palavra exata
+        </label>
+        <label class="option-pill">
+            <input type="checkbox" id="caseSensitive">
+            Maiúsculas/minúsculas
+        </label>
+    </div>
+
+    <div id="resultados"></div>
+</div>
+{% endblock %}
