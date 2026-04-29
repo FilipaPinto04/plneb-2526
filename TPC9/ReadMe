@@ -1,0 +1,60 @@
+# Harry Potter - modelos Word2Vec
+
+O sistema converte o texto em vetores numéricos de alta dimensão, permitindo descobrir relações entre palavras, medir proximidade semântica e explorar a estrutura do vocabulário.
+Cada notebook inclui os mesmos testes de avaliação qualitativa, permitindo comparação direta entre os modelos.
+
+## Pré-processamento
+
+O texto de ambos os livros é processado, para cada frase são removidos pontuação, espaços e o texto é convertido para minúsculas. As frases tokenizadas dos dois livros são concatenadas numa lista única (final) que serve de input ao treino.
+
+## Configurações dos Modelos
+
+Foram desenvolvidos quatro modelos com hiperparâmetros distintos para analisar o impacto de cada configuração:
+
+- harry: sg=0, vector_size=100, window=5, epochs=40 -> model_harry.txt
+- harry2: sg=1, vector_size=100, window=5, epochs=40 -> model2_harry.txt
+- harry3: sg=0, vector_size=100, window=5, epochs=20 -> model3_harry.txt
+- harry4: sg=0, vector_size=200, window=10, epochs=40 -> model4_harry.txt
+
+## Comparação de Resultados
+
+### Similaridade entre Personagens
+
+Os valores de similaridade entre harry-rony, harry-malfoy e harry-hagrid variam bastante entre modelos:
+
+- harry: 0.31 / 0.14 / 0.17 — valores moderados, distingue bem aliados de antagonistas
+- harry2: 0.59 / 0.40 / 0.36 — valores mais altos em geral, mas perde distinção entre aliados e antagonistas (malfoy com 0.40 é próximo de rony com 0.59)
+- harry3: 0.54 / 0.33 / 0.60 — hagrid mais próximo de harry do que rony, o que sugere subajustamento por menos épocas de treino
+- harry4: 0.08 / 0.10 / 0.05 — valores muito baixos, vetores maiores com corpus pequeno resultaram em representações dispersas e pouco informativas
+
+### Pares de Palavras
+
+- harry: harry-oldemort -0.01, vassoura-quadribol 0.24, varinha-bruxo -0.04 —> captura a oposição harry/voldemort corretamente (valor negativo), mas falha na associação varinha-bruxo
+- harry2: harry-voldemort 0.22, vassoura-quadribol 0.35, varinha-bruxo 0.11 —> o melhor desempenho global nos pares semânticos, todas as associações são positivas e coerentes
+- harry3: harry-voldemort 0.05, vassoura-quadribol 0.12, varinha-bruxo -0.11 —> claramente inferior ao harry que tem mais epochs, confirmando que 20 epochs são insuficientes
+- harry4: valores próximos de zero em todos os pares —> o aumento de dimensionalidade sem conteúdo maior prejudicou gravemente a qualidade das representações
+
+### Palavra Intrusa (`doesnt_match`)
+
+- harry: identifica malfoy como intruso em [harry, ron, hermione, malfoy] que está correto e snape em [gryffindor, slytherin, hufflepuff, snape] que também está correto
+- harry2: identifica hermione como intrusa em [harry, ron, hermione, malfoy] que não era o resultado esperado mas pode ser considerado correto por ser uma personagem de género diferente
+- harry3: identifica bem malfoy e snape — correto, apesar das similaridades mais fracas
+- harry4: identifica bem malfoy e snape — acerta apesar das representações dispersas
+
+### Conclusão
+
+O harry2 produz as similaridades absolutas mais altas e capta melhor relações semânticas entre conceitos do universo mágico (vassoura-quadribol, varinha-bruxo), sendo o modelo mais expressivo. No entanto, perde alguma precisão na distinção entre aliados/antagonistas e falha no 'doesnt_match'.
+
+O harry é o modelo mais equilibrado: similaridades moderadas mas semanticamente coerentes, distingue corretamente aliados de antagonistas (harry-voldemort negativo) e acerta em ambos os casos de palavras intrusas.
+
+O harry3 confirma que reduzir para 20 epochs degrada a qualidade do modelo, e o harry4 demonstra que aumentar a dimensionalidade dos vetores sem aumentar a quantidade de conteúdo é contraproducente uma vez que, os vetores ficam demasiado dispersos para um dataset do tamanho de dois livros.
+
+## Visualização de Tensores
+
+Todos os modelos exportam ficheiros compatíveis com o Google Embedding Projector, permitindo explorar visualmente os clusters de palavras:
+
+- model_harry.txt — Pesos do modelo em formato Word2Vec texto
+- model_harry_tensor.tsv — Vetores para análise espacial
+- metadata.tsv — Etiquetas das palavras correspondentes
+
+Para analisar visualmente: [projector.tensorflow.org] (https://projector.tensorflow.org/).
