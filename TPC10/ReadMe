@@ -1,0 +1,46 @@
+# TPC10
+
+Reconhecimento de Entidades Nomeadas (NER) em português com o modelo BERTimbau (neuralmind/bert-base-portuguese-cased) e o dataset 'lfcc/portuguese_ner'.
+
+Este notebook treina um modelo de Reconhecimento de Entidades Nomeadas (NER) capaz de identificar automaticamente entidades em texto em português, como pessoas, locais, organizações, datas e profissões.
+O processo começa por carregar um dataset de textos anotados em português. De seguida, os textos são tokenizados com o BERTimbau, um modelo BERT treinado especificamente para português, e as anotações originais são realinhadas com os novos tokens gerados. O modelo é então treinado por fine-tuning, aprendendo a classificar cada token numa das categorias de entidade. Por fim, o modelo treinado pode ser usado em inferência para identificar entidades em qualquer texto novo em português.
+
+## Carregamento dos Dados
+
+- Dataset: ['lfcc/portuguese_ner'](https://huggingface.co/datasets/lfcc/portuguese_ner)
+- Carregado via 'datasets' da Hugging Face
+
+## Pré-Processamento
+
+- Tokenização com 'AutoTokenizer' do BERTimbau
+- Alinhamento de labels com os sub-tokens gerados pelo tokenizador (via 'word_ids()')
+- Tokens especiais ([CLS], [SEP]) e sub-palavras extras recebem label '-100' (ignorados pelo BERT)
+
+## Treino
+
+- Modelo base: 'neuralmind/bert-base-portuguese-cased'
+- Fine-tuning para classificação de tokens (AutoModelForTokenClassification)
+- Configuração de treino:
+    -> Learning Rate; 2e-5
+    -> Batch Size; 16
+    -> Épocas; 2
+    -> Weight Decay; 0.01
+    -> Eval Strategy; por época
+
+## Avaliação
+
+- Métricas via seqeval: Precision, Recall, F1, Accuracy
+
+## Classes de Entidades
+
+- ID: 0, Label: 'O', Descrição: 'Sem entidade'
+- ID: 1, Label: 'B-Data', Descrição: 'Início de data'
+- ID: 2, Label: 'I-Data', Descrição: 'Continua de data'
+- ID: 3, Label: 'B-Local', Descrição: 'Início de local'
+- ID: 4, Label: 'I-Local', Descrição: 'Continua de local'
+- ID: 5, Label: 'B-Organizacao', Descrição: 'Início de organização'
+- ID: 6, Label: 'I-Organizacao', Descrição: 'Continua de organização'
+- ID: 7, Label: 'B-Pessoa', Descrição: 'Início de pessoa'
+- ID: 8, Label: 'I-Pessoa', Descrição: 'Continua de pessoa'
+- ID: 9, Label: 'B-Profissao', Descrição: 'Início de profissão'
+- ID: 10, Label: 'I-Profissao', Descrição: 'Continua de profissão'
