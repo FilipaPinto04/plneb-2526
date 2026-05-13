@@ -1,0 +1,57 @@
+# TPC11 — TF-IDF
+
+Usar TF-IDF (Term Frequency–Inverse Document Frequency) e Similaridade por Cosseno para ordenar documentos por relevância face a uma query.
+
+
+## Visão Geral
+
+O script implementa o modelo de espaço vetorial clássico para recuperação de documentos:
+
+1. Pré-processamento — tokenizar, converter para minúsculas, remover stop words e pontuação
+2. Vetorização TF-IDF — representar cada documento como um vetor ponderado
+3. Vetorização da query — aplicar a mesma ponderação à query
+4. Similaridade por cosseno — ordenar os documentos por semelhança com a query
+
+
+### 1. Pré-processamento (pre_processamento)
+
+Cada documento é processado com o spaCy:
+- Converte todos os tokens para minúsculas
+- Remove stop words (ex: *the*, *is*, *in*)
+- Remove pontuação e espaços
+
+### 2. Frequência do Termo — tf(doc)
+
+Mede a frequência com que um termo aparece num documento, normalizada pelo seu comprimento:
+
+TF(t, d) = contagem(t em d) / total de palavras em d
+
+### 3. Frequência Inversa nos Documentos — idf(collection)
+
+Mede a raridade de um termo no conjunto de documentos:
+
+IDF(t, D) = log10( N / df(t) )
+
+Onde N é o número de documentos e df(t) é quantos documentos contêm o termo.
+
+### 4. TF-IDF — tf_idf(collection)
+
+Combina o TF e o IDF num único peso por termo por documento:
+
+TF-IDF(t, d, D) = TF(t, d) × IDF(t, D)
+
+Cada documento é representado como um vetor sobre o vocabulário completo, com zeros para os termos ausentes.
+
+### 5. Similaridade por Cosseno — cosine_similarity(v1, v2)
+
+Mede o ângulo entre dois vetores para determinar o quão semelhantes são:
+
+cosseno(v1, v2) = (v1 · v2) / (|v1| × |v2|)
+
+Devolve um valor entre '0' (sem similaridade) e '1' (direção idêntica).
+
+## Notas
+
+- O IDF usa logaritmo de base 10
+- Termos com IDF igual a zero (presentes em todos os documentos) ficam com peso '0', o que é o comportamento esperado
+- A query é vetorizada usando os valores de IDF do corpo, não calculados de novo
